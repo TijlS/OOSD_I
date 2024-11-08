@@ -9,8 +9,7 @@ public class DomeinController {
 	}
 
 	public void rolDobbelstenen() {
-		// TODO - implement DomeinController.rolDobbelstenen
-		throw new UnsupportedOperationException();
+		spel.rolDobbelstenen();
 	}
 
 	public int geefAantalOgenWorp() {
@@ -18,8 +17,11 @@ public class DomeinController {
 	}
 
 	public int geefScore() {
-		// TODO - implement DomeinController.geefScore
-		throw new UnsupportedOperationException();
+		return spel.getScore();
+	}
+
+	public boolean isEindeSpel() {
+		return spel.isEindeSpel();
 	}
 
 }

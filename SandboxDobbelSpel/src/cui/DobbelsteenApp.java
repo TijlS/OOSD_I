@@ -7,9 +7,14 @@ import domein.DomeinController;
 public class DobbelsteenApp {
 
 	private static Scanner input = new Scanner(System.in);
+	private DomeinController dc;
+
+	public DobbelsteenApp(DomeinController dc) {
+		this.dc = dc;
+	}
 
 	public static void main(String[] args) {
-		DobbelsteenApp da = new DobbelsteenApp();
+		DobbelsteenApp da = new DobbelsteenApp(new DomeinController());
 
 		da.speelDobbelsteenSpel();
 
@@ -17,30 +22,29 @@ public class DobbelsteenApp {
 	}
 
 	private void speelDobbelsteenSpel() {
-		DomeinController dc = new DomeinController();
+		toonStartScherm();
 
-		toonMenu();
-		int keuze = geefMenuKeuze();
-
-		switch (keuze) {
-		case 0 -> System.out.println("Tot de volgende keer!");
-		case 1 -> dc.startNieuwSpel();
-
-		default -> throw new IllegalArgumentException("Unexpected value: " + keuze);
+		while (!dc.isEindeSpel()) {
+			toonRolScherm();
 		}
 
-		System.out.println("Applicatie wordt gesloten");
+		System.out.printf("Einde van het spel, %nje score is %d", dc.geefScore());
 	}
 
-	private void toonMenu() {
-		System.out.println("MENU");
-		System.out.println("0. Stop");
-		System.out.println("1. Start nieuw spel");
+	private void toonStartScherm() {
+		wachtVoorKlikOpKnop("Start");
+		dc.startNieuwSpel();
 	}
 
-	private int geefMenuKeuze() {
-		System.out.println("Maak je keuze: ");
-		return input.nextInt();
+	private void wachtVoorKlikOpKnop(String knop) {
+		System.out.printf("Druk op <enter> om te klikken op de knop %s...", knop);
+		input.nextLine();
+	}
+
+	private void toonRolScherm() {
+		wachtVoorKlikOpKnop("Rol");
+		dc.rolDobbelstenen();
+		System.out.printf("%n----> aantal ogen geworpen: %d%n%n", dc.geefAantalOgenWorp());
 	}
 
 }

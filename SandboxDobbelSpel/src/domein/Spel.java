@@ -12,7 +12,7 @@ public class Spel {
 			dobbelstenen[i] = new Dobbelsteen();
 		}
 
-		setScore(-1);
+		score = -1;
 	}
 
 	public void rolDobbelstenen() {
@@ -20,19 +20,19 @@ public class Spel {
 			dobbelsteen.rol();
 		}
 
-		if (eersteWorp == 0)
-			setEersteWorp(geefAantalOgenWorp());
+		if (!isEindeSpel()) {
+			int worp = geefAantalOgenWorp();
 
-		boolean negatieveScore = score == -1;
-		int worp = geefAantalOgenWorp();
-
-		if (negatieveScore && worpIs7Of11(eersteWorp))
-			setScore(2);
-		if (negatieveScore && eersteWorp != 0 && worp == eersteWorp) {
-			if (worp == eersteWorp)
-				setScore(1);
-			if (worpIs7Of11(worp))
-				setScore(0);
+			if (eersteWorp == 0) {
+				setEersteWorp(geefAantalOgenWorp());
+				if (worpIs7Of11(eersteWorp))
+					score = 2;
+			} else {
+				if (worp == eersteWorp)
+					score = 1;
+				if (worpIs7Of11(worp))
+					score = 0;
+			}
 		}
 	}
 
@@ -61,8 +61,8 @@ public class Spel {
 		return worp == 7 || worp == 11;
 	}
 
-	public void setScore(int score) {
-		this.score = score;
+	public int getScore() {
+		return this.score;
 	}
 
 }
