@@ -12,7 +12,7 @@ public class Spel {
 			dobbelstenen[i] = new Dobbelsteen();
 		}
 
-		score = -1;
+		this.score = -1;
 	}
 
 	public void rolDobbelstenen() {

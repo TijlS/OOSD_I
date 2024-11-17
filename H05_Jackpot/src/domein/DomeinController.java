@@ -5,23 +5,19 @@ public class DomeinController {
 	private Jackpot jackpot;
 
 	public void startNieuweJackpot() {
-		// TODO - implement DomeinController.startNieuweJackpot
-		throw new UnsupportedOperationException();
+		jackpot = new Jackpot();
 	}
 
 	public int[] geefGetallen() {
-		// TODO - implement DomeinController.geefGetallen
-		throw new UnsupportedOperationException();
+		return jackpot.geefGetallen();
 	}
 
 	public void speel() {
-		// TODO - implement DomeinController.speel
-		throw new UnsupportedOperationException();
+		jackpot.speel();
 	}
 
 	public int geefScore() {
-		// TODO - implement DomeinController.geefScore
-		throw new UnsupportedOperationException();
+		return jackpot.geefScore();
 	}
 
 }
