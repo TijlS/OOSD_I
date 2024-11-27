@@ -1,5 +1,7 @@
 package domein;
 
+import dto.KapitaalDTO;
+
 public class DomeinController {
 
 	private Kapitaal kapitaal;
@@ -21,7 +23,7 @@ public class DomeinController {
 	}
 
 	public KapitaalDTO geefKapitaal() {
-		// TODO - retourneer een kapitaalDTO-object die bedrag en intrest van kapitaal bevat
+		return new KapitaalDTO(kapitaal.getBedrag(), kapitaal.getIntrest());
 	}
 
 }

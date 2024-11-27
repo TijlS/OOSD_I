@@ -1,6 +1,9 @@
 package domein;
 
 import java.math.BigDecimal;
+import java.util.List;
+
+import dto.RekeningDTO;
 
 public class DomeinController {
 	private Bank miniBank = new Bank();
@@ -15,13 +18,21 @@ public class DomeinController {
 		miniBank.voegRekeningToe(rekening);
 	}
 
-	// TODO
-	//public RekeningDTO[] geefRekeningen() {
-	  
-	//}
+	public RekeningDTO[] geefRekeningen() {
+		List<Rekening> rekeningen = this.miniBank.getRekeningen();
+
+		RekeningDTO[] rekeningDTOs = new RekeningDTO[rekeningen.size()];
+
+		for (int i = 0; i < rekeningDTOs.length; i++) {
+			rekeningDTOs[i] = new RekeningDTO(rekeningen.get(i).getRekeningnummer(), rekeningen.get(i).getHouder(),
+					rekeningen.get(i).getSaldo());
+		}
+
+		return rekeningDTOs;
+	}
 
 	public void stort(int indexVanRekening, BigDecimal bedrag) {
-		miniBank.stort(indexVanRekening, bedrag); 
+		miniBank.stort(indexVanRekening, bedrag);
 	}
 
 	public void haalAf(int indexVanRekening, BigDecimal bedrag) {

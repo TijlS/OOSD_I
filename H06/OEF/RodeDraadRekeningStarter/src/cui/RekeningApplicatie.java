@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.security.SecureRandom;
 
 import domein.DomeinController;
+import dto.RekeningDTO;
 
 public class RekeningApplicatie {
 	private DomeinController dc;
@@ -49,11 +50,17 @@ public class RekeningApplicatie {
 		}
 		toonOverzicht(dc.geefRekeningen(), "=== Overzicht na overschrijven ===");
 	}
-	
+
 	private void toonOverzicht(RekeningDTO[] alleRekeningen, String hoofding) {
 		System.out.printf("%n%s%n", hoofding);
 
 		// TODO - hier aanvullen
+		for (int i = 0; i < alleRekeningen.length; i++) {
+			RekeningDTO rekening = alleRekeningen[i];
+
+			System.out.println(String.format("%d. Rekening %d op naam van %s heeft een saldo %.2f", i,
+					rekening.rekeningNummer(), rekening.houder(), rekening.saldo()));
+		}
 
 		System.out.println();
 	}

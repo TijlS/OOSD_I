@@ -1,9 +1,11 @@
 package cui;
 
+import static domein.Kapitaal.MAX_INTREST;
+import static domein.Kapitaal.MIN_INTREST;
+
 import java.util.Scanner;
 
 import domein.DomeinController;
-import static domein.Kapitaal.*;
 import dto.KapitaalDTO;
 
 public class KapitaalApplicatie {
@@ -17,10 +19,10 @@ public class KapitaalApplicatie {
 	private static final int INTREST = 10;
 	private static final int BEDRAG = 1000;
 	private static final int AANTAL_JAREN = 10;
-	
-	private static final String[] menu = {"Startkapitaal wijzigen", "Intrest wijzigen", 
-			"Overzicht kapitaalsopbouw tonen","Stoppen"};
-	
+
+	private static final String[] menu = { "Startkapitaal wijzigen", "Intrest wijzigen",
+			"Overzicht kapitaalsopbouw tonen", "Stoppen" };
+
 	public KapitaalApplicatie(DomeinController dc) {
 		this.dc = dc;
 	}
@@ -50,16 +52,14 @@ public class KapitaalApplicatie {
 		return keuze;
 	}
 
-	private void toonMenu()
-	{
+	private void toonMenu() {
 		int keuzenr = 1;
 		System.out.printf("%n%n== MENU ==%n");
-		for (String eenMenu: menu)
-		{
+		for (String eenMenu : menu) {
 			System.out.printf("%d. %s%n", keuzenr++, eenMenu);
 		}
 	}
-	
+
 	private void wijzigStartkapitaal() {
 		double startkapitaal = geefWaarde(String.format("%nGeef het start kapitaal: "));
 		dc.wijzigStartkapitaal(startkapitaal);
@@ -70,13 +70,18 @@ public class KapitaalApplicatie {
 		dc.wijzigIntrest(intrest);
 	}
 
-	private double geefWaarde(String boodschap)
-	{
+	private double geefWaarde(String boodschap) {
 		System.out.print(boodschap);
 		return invoer.nextDouble();
 	}
-	
+
 	private void toonKapitaalsopbouw() {
-		//TODO
+		KapitaalDTO kapitaal = dc.geefKapitaal();
+		System.out
+				.println(String.format("Kapitaal: %.2f Euro - Intrest: %.2f%%", kapitaal.bedrag(), kapitaal.intrest()));
+
+		for (int i = 1; i <= 10; i++) {
+			System.out.println(String.format("Opbouw kapitaal na %d jaar: %.2f Euro", i, dc.geefOpgebouwdKapitaal(i)));
+		}
 	}
 }

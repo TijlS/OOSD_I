@@ -5,19 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
-	
+
 	private List<Rekening> rekeningen = new ArrayList<>();
 
 	public void voegRekeningToe(Rekening rekening) {
-		//TODO
+		rekeningen.add(rekening);
 	}
-	
+
 	public List<Rekening> getRekeningen() {
 		return rekeningen;
 	}
 
 	private Rekening geefRekening(int indexVanRekening) {
-		//TODO
+		if (indexVanRekening < 0 || indexVanRekening >= rekeningen.size())
+			return null;
+		return this.rekeningen.get(indexVanRekening);
 	}
 
 	public void stort(int indexVanRekening, BigDecimal bedrag) {
@@ -36,8 +38,7 @@ public class Bank {
 		Rekening rekeningVan = geefRekening(indexVanRekening);
 		Rekening rekeningNaar = geefRekening(indexNaarRekening);
 		if (rekeningVan != null && rekeningNaar != null)
-			rekeningVan.schrijfOver(bedrag, rekeningNaar);	
+			rekeningVan.schrijfOver(bedrag, rekeningNaar);
 	}
-
 
 }

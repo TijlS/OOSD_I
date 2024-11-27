@@ -3,13 +3,13 @@ package domein;
 import java.math.BigDecimal;
 
 public class Rekening {
-	
+
 	private long rekeningnummer;
 	private String houder;
 	private BigDecimal saldo;
 
 	private static final int MAX_CIJFERS = 12;
-	
+
 	public Rekening(long rekeningnummer, String houder) {
 		this(rekeningnummer, houder, BigDecimal.ZERO);
 	}
@@ -21,17 +21,21 @@ public class Rekening {
 	}
 
 	private void setRekeningnummer(long rekeningnummer) {
-		// TODO
+		if (Long.toString(rekeningnummer).length() > MAX_CIJFERS)
+			throw new IllegalArgumentException(
+					String.format("Rekeningnummer mag max. %d tekens lang zijn!", MAX_CIJFERS));
 		this.rekeningnummer = rekeningnummer;
 	}
 
 	private void setHouder(String houder) {
-		// TODO
+		if (houder == null || houder.isBlank())
+			throw new IllegalArgumentException("Houder moet ingevuld zijn!");
 		this.houder = houder;
 	}
 
 	private void setSaldo(BigDecimal saldo) {
-		// TODO
+		if (saldo == null || saldo.signum() == -1)
+			throw new IllegalArgumentException("Saldo mag niet negatief zijn!");
 		this.saldo = saldo;
 	}
 
@@ -46,17 +50,22 @@ public class Rekening {
 	public BigDecimal getSaldo() {
 		return saldo;
 	}
-	
+
 	public void stort(BigDecimal bedrag) {
-		// TODO
+		if (bedrag.signum() == 1)
+			this.setSaldo(this.saldo.add(bedrag));
 	}
 
 	public void haalAf(BigDecimal bedrag) {
-		// TODO
+		if (bedrag.signum() == 1)
+			this.setSaldo(this.saldo.subtract(bedrag));
 	}
 
 	public void schrijfOver(BigDecimal bedrag, Rekening naarRekening) {
-		// TODO
+		if (naarRekening == null)
+			throw new IllegalArgumentException("Ontvanger mag niet onbepaald zijn!");
+		this.haalAf(bedrag);
+		naarRekening.stort(bedrag);
 	}
 
 }

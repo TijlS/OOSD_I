@@ -14,7 +14,8 @@ public class Kapitaal {
 	}
 
 	public final void setBedrag(double bedrag) {
-		// TODO - exception werpen indien niet aan domeinregel voldaan is
+		if (bedrag <= MIN_BEDRAG)
+			throw new IllegalArgumentException(String.format("Bedrag moet groter dan %.2f zijn!", MIN_BEDRAG));
 		this.bedrag = bedrag;
 	}
 
@@ -23,12 +24,22 @@ public class Kapitaal {
 	}
 
 	public final void setIntrest(double intrest) {
-		// TODO - exception werpen indien niet aan domeinregel voldaan is
+		if (intrest < MIN_INTREST || intrest > MAX_INTREST)
+			throw new IllegalArgumentException(
+					String.format("Intrest moet tussen %.2f & %.2f liggen!", MIN_INTREST, MAX_INTREST));
 		this.intrest = intrest;
 	}
 
 	public double geefOpgebouwdKapitaal(int aantalJaar) {
-		// TODO - recursieve invulling geven
+		double resultaat;
+
+		if (aantalJaar == 0)
+			resultaat = this.bedrag;
+		else
+			resultaat = (1 + this.intrest / 100) * geefOpgebouwdKapitaal(aantalJaar - 1);
+
+		return resultaat;
+
 	}
 
 }

@@ -12,30 +12,30 @@ public class JudoApplicatie {
 	public void start() {
 		String kleur = voerKleurIn(geefGeldigeKleuren());
 
-		//TODO
-		// ken de juiste gordel volgens "kleur" toe aan de variabele gordel
-		Gordel gordel = null;
+		Gordel gordel = Gordel.valueOf(kleur);
 
-		//TODO
-		// maak gebruik van de Gordel-getters om de juiste uitvoer te genereren
-		System.out.printf("Proficiat, je graad is %s, dat is %s.%n", "to-do", "to-do");
+		System.out.printf("Proficiat, je graad is %s, dat is %s.%n", gordel.getGraad(), gordel.getJapanseNaam());
 
-		//TODO
-		// zorg dat de else tak wordt uitgevoerd indien het een zwarte gordel betreft
-		if (true)
+		if (gordel != Gordel.ZWART)
 			System.out.printf("Focus en train met veel discipline en inzet, je volgende gordel is %s!",
 					gordel.geefVolgende());
 		else
 			System.out.println("Je bent een meester!");
 	}
 
-	// retourneert een geldig kleur in UPPERCASE karakters
 	private String voerKleurIn(List<String> geldigeKleuren) {
 		String kleur;
+		boolean invoerOk;
 		do {
 			System.out.printf("Welke kleur heeft je gordel %s? ", geefKleurenAlsTekstInLijst(geldigeKleuren));
 			kleur = invoer.nextLine();
-		} while (!geldigeKleuren.contains(kleur.toLowerCase()));
+
+			invoerOk = geldigeKleuren.contains(kleur.toLowerCase());
+
+			if (!invoerOk) {
+				System.out.println("Je gaf geen geldige kleur in... Probeer opnieuw!");
+			}
+		} while (!invoerOk);
 		return kleur.toUpperCase();
 	}
 
@@ -50,9 +50,9 @@ public class JudoApplicatie {
 
 	private List<String> geefGeldigeKleuren() {
 		List<String> kleuren = new ArrayList<>();
-		//TODO overloop alle gordels
-		//for (Gordel gordel :         )
-		//	kleuren.add(  TODO naam van de enum in kleine letters  );
+
+		for (Gordel gordel : Gordel.values())
+			kleuren.add(gordel.name().toLowerCase());
 		return kleuren;
 	}
 
