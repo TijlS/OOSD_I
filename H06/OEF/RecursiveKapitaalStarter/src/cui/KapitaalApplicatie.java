@@ -80,7 +80,7 @@ public class KapitaalApplicatie {
 		System.out
 				.println(String.format("Kapitaal: %.2f Euro - Intrest: %.2f%%", kapitaal.bedrag(), kapitaal.intrest()));
 
-		for (int i = 1; i <= 10; i++) {
+		for (int i = 1; i <= AANTAL_JAREN; i++) {
 			System.out.println(String.format("Opbouw kapitaal na %d jaar: %.2f Euro", i, dc.geefOpgebouwdKapitaal(i)));
 		}
 	}
