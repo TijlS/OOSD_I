@@ -1,6 +1,6 @@
 package domein;
 
-public class Huisdier extends Object {
+public class Huisdier {
 	private String naam;
 
 	public Huisdier(String naam) {
