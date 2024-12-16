@@ -21,6 +21,12 @@ public class World {
 		System.out.printf("%-3s= %-10s%n", 20 / 3, "20 / 3");
 		System.out.printf("%-3s= %-10s%n", 20 % 3, "20 % 3");
 
+		System.out.println("\\t = \t;");
+		System.out.println("\\n = \n;");
+		System.out.println("\\r = \r;");
+		System.out.println("\\b = \b;");
+		System.out.println("\\f = \f;");
+
 	}
 
 }
