@@ -1,7 +1,9 @@
 package cui;
 
+import java.security.SecureRandom;
+
 public class GetallenApplicatie {
-	
+
 	public void start() {
 		int[] herschikteGetallen = {};
 
@@ -9,13 +11,13 @@ public class GetallenApplicatie {
 		int[] getallen = { -5, 2, 7, -4, 3, 9, -1, -8 };
 
 		// Test je code met enkel positieve getallen
-		// int[] getallen = { 77, 67, 71, 74, 45, 44, 23, 0 };
+//		int[] getallen = { 77, 67, 71, 74, 45, 44, 23, 0 };
 
 		// Test je code met enkel negatieve getallen
-		// int[] getallen = { -77, -67, -71, -74, -45, -44, -23, -10 };
-		
+//		int[] getallen = { -77, -67, -71, -74, -45, -44, -23, -10 };
+
 		// Gebruik array van willekeurige getallen
-		//vulMetWillekeurigeGetallen(getallen);
+		vulMetWillekeurigeGetallen(getallen);
 
 		System.out.println("Bij aanvang");
 		System.out.println("===========");
@@ -56,6 +58,14 @@ public class GetallenApplicatie {
 	}
 
 //TODO	
-	//Voeg private methode vulMetWillekeurigeGetallen toe
+	// Voeg private methode vulMetWillekeurigeGetallen toe
+	private void vulMetWillekeurigeGetallen(int[] getallen) {
+		SecureRandom sr = new SecureRandom();
+
+		for (int i = 0; i < getallen.length; i++) {
+			getallen[i] = sr.nextInt(-100, 101);
+		}
+
+	}
 
 }
