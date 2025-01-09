@@ -1,16 +1,19 @@
 package cui;
 
+import static domein.Driehoek.TOEGESTANE_TEKENS;
+
 import java.util.Scanner;
 
 import domein.DomeinController;
-import static domein.Driehoek.*;
+import domein.Driehoek;
+import utils.Orientatie;
 
 public class DriehoekApplicatie {
-	
+
 	private static final String[] HOOFDMENU_OPTIES = { "Grootte wijzigen", "Teken wijzigen", "Orientatie wijzigen",
 			"Driehoek tekenen", "Stoppen" };
 	private static final String[] ORIENTATIE_OPTIES = init_Orientatie_Opties();
-	
+
 	private static final Scanner invoer = new Scanner(System.in);
 	private DomeinController dc;
 
@@ -18,8 +21,12 @@ public class DriehoekApplicatie {
 		this.dc = dc;
 	}
 
-	private static String[] init_Orientatie_Opties() { //Zet de enums om naar String[]
-		// TODO
+	private static String[] init_Orientatie_Opties() {
+		String[] orientatie_opties = new String[Orientatie.values().length];
+		int index = 0;
+		for (Orientatie orientatie : Orientatie.values())
+			orientatie_opties[index++] = orientatie.toString();
+		return orientatie_opties;
 	}
 
 	public void start() {
@@ -36,12 +43,28 @@ public class DriehoekApplicatie {
 		System.out.printf("%nTot een volgende keer!");
 	}
 
-	private int voerGrootteIn() { //Maak gebruik van MIN_GROOTTE en MAX_GROOTTE
-		// TODO
+	private int voerGrootteIn() {
+		int grootte;
+		boolean geldigeInvoer;
+
+		do {
+			System.out.printf("Geef de grootte voor de vorm, zorg dat deze ligt tussen %d en %d: ",
+					Driehoek.MIN_GROOTTE, Driehoek.MAX_GROOTTE);
+			grootte = invoer.nextInt();
+
+			geldigeInvoer = grootte >= Driehoek.MIN_GROOTTE && grootte <= Driehoek.MAX_GROOTTE;
+
+			if (!geldigeInvoer)
+				System.out.println("Dit is geen geldige invoer!");
+
+		} while (!geldigeInvoer);
+
+		return grootte;
+
 	}
 
-	private int voerOrientatieIn() { //Maak gebruik van maakMenuKeuze
-		//TODO
+	private int voerOrientatieIn() {
+		return maakMenuKeuze(ORIENTATIE_OPTIES, "Positie rechte hoek");
 	}
 
 	private char voerTekenIn() {

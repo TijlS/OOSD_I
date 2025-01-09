@@ -1,0 +1,141 @@
+Naam: Schipper
+Voornaam: Tijl
+Klas: 1G
+
+Vergeet niet je document te hernoemen! 
+Volg de instructies uit de opgave!
+
+=========================================Vraag 1=========================================
+
+Vul de code hier rechtstreeks aan! Noteer dus enkel wat ontbreekt op het opgaveblad.
+Tip: Je hebt geen tijd om al deze code over te nemen in Eclipse.
+Als je geen code moet aanvullen zet je specifiek “Niets aan te vullen”.
+
+Code 1a:
+Niets aan te vullen
+
+Code 1b:
+extends Fiets
+
+Code 2: 
+public void setGemSnelheid(double gemSnelheid){
+
+Code 3: 
+super(gemSnelheid);
+this.bereik = bereik;
+
+Code 4a: 
+@Overrides
+
+Code 4b: 
+super.berekenAfstand();
+
+Code 5:
+int aantalElektrisch;
+
+foreach(Fiets f: fietsen) {
+	if(f instanceof ElektrischeFiets) aantalElektrisch+;
+}
+
+return aantalElektrisch;
+
+=========================================Vraag 2=========================================
+
+Hiervoor moet je alleen het .vpp-bestand uploaden!
+
+=========================================Vraag 3=========================================
+
+Deel 1 - Vul hieronder de test cases voor de constructor Lift aan.
+
+Test-case 1.1
+- laagsteVerdieping = 0
+- hoogsteVerdieping = 0
+- verwacht resultaat = WerptException
+
+Test-case 1.2
+- laagsteVerdieping = 0
+- hoogsteVerdieping = 1
+- verwacht resultaat = werptException
+
+Test-case 1.3
+- laagsteVerdieping = -2
+- hoogsteVerdieping = 0
+- verwacht resultaat = werptException
+
+Test-case 1.4
+- laagsteVerdieping = -1
+- hoogsteVerdieping = 1
+- verwacht resultaat = maaktLift
+
+Test-case 1.5
+- laagsteVerdieping = -3
+- hoogsteVerdieping = 1
+- verwacht resultaat = maaktLift
+
+Test-case 1.6
+- laagsteVerdieping = -1
+- hoogsteVerdieping = 3
+- verwacht resultaat = maaktLift
+
+Test-case 1.7
+- laagsteVerdieping = -3
+- hoogsteVerdieping = 3
+- verwacht resultaat = maaktLift
+
+Deel 2 - Plak hieronder de klasse LiftTest met de unit testen voor de methode gaNaarOmhoog.
+package testen;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import domein.Lift;
+
+class LiftTest {
+
+	private static final int GELDIGE_LAAGSTE_VERDIEPING = -3;
+	private static final int GELDIGE_HOOGSTE_VERDIEPING = 3;
+
+	private Lift l;
+
+	@BeforeEach
+	void before() {
+		l = new Lift(GELDIGE_LAAGSTE_VERDIEPING, GELDIGE_HOOGSTE_VERDIEPING);
+	}
+
+	/**
+	 * gaNaarOmhoog <br>
+	 * - negatief verdiep -> EXCEPTION <br>
+	 * - verdiep 0 -> EXCEPTION <br>
+	 * - geen verdiep -> EXCEPTION <br>
+	 * - wel verdiep, minder dan hoogste -> OMHOOG <br>
+	 * - wel verdiep, hoger dan hoogste -> TOT HOOGSTE
+	 */
+
+	@ParameterizedTest
+	@ValueSource(ints = { -3, 0 })
+	void gaNaarOmhoog_OngeldigVerdiep_WerptException(int verdiep) {
+		assertThrows(IllegalArgumentException.class, () -> l.gaNaarOmhoog(verdiep));
+	}
+
+	@ParameterizedTest
+	@ValueSource(ints = { 1, GELDIGE_HOOGSTE_VERDIEPING - 1, GELDIGE_HOOGSTE_VERDIEPING })
+	void gaNaarOmhoog_GeldigVerdiepGelijkAanHoogste_gaatOmhoog(int verdiep) {
+		l.gaNaarOmhoog(verdiep);
+
+		assertEquals(verdiep, l.getVerdieping());
+	}
+
+	@Test
+	void gaNaarOmhoog_GeldigVerdiepHogerDanHoogste_gaatOmhoog() {
+		l.gaNaarOmhoog(GELDIGE_HOOGSTE_VERDIEPING + 1);
+
+		assertEquals(GELDIGE_HOOGSTE_VERDIEPING, l.getVerdieping());
+	}
+
+}
+

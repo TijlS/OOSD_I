@@ -22,8 +22,6 @@ public class DomeinController {
 	}
 
 	public void wijzigOrientatie(int orientatie) {
-		//TODO
-		// roep setOrientatie aan voor de driehoek instantie
-		// geef de juiste waarde door voor de enum parameter
+		driehoek.setOrientatie(Orientatie.values()[orientatie - 1]);
 	}
 }

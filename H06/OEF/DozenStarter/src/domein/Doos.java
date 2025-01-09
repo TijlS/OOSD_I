@@ -55,7 +55,7 @@ public class Doos {
 	}
 
 	private void setKleur(String kleur) {
-		if (kleur == null || kleur.isEmpty() || kleur.isBlank())
+		if (kleur == null || kleur.isBlank())
 			throw new IllegalArgumentException("Kleur moet een waarde hebben!");
 		this.kleur = kleur;
 	}

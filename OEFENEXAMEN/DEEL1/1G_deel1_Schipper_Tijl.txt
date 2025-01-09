@@ -1,0 +1,334 @@
+Naam: Schipper
+Voornaam: Tijl
+Klas: 1G
+
+Vergeet niet je document te hernoemen! Volg de instructies uit de opgave!
+
+Kopieer telkens de inhoud van de volledige klasse onder de correcte titellijn.
+
+//----------------- Plant-----------------
+package domein;
+
+public class Plant {
+	private final String naam;
+	private char soortCode;
+	private int hoogteInCm;
+	private int aantalInVoorraad;
+	private double prijsInEuro;
+
+	private static final int MIN_HOOGTE = 0;
+	private static final int MAX_HOOGTE = 400;
+	private static final int BTW_PERCENTAGE = 21;
+
+	public Plant(String naam, char soortCode, int hoogteInCm, double prijsInEuro, int aantalInVoorraad) {
+		controleerNaam(naam);
+
+		this.naam = naam;
+		this.setSoortCode(soortCode);
+		this.setHoogteInCm(hoogteInCm);
+		this.setAantalInVoorraad(aantalInVoorraad);
+		this.setPrijsInEuro(prijsInEuro);
+	}
+
+	public void setAantalInVoorraad(int aantalInVoorraad) {
+		if (aantalInVoorraad < 0)
+			throw new IllegalArgumentException("Aantal in voorraad moet positief zijn!");
+		this.aantalInVoorraad = aantalInVoorraad;
+	}
+
+	public Plant(String naam, char soortCode) {
+		this(naam, soortCode, 100, 0, 0);
+	}
+
+	private void controleerNaam(String naam) {
+		if (naam == null || naam.isBlank())
+			throw new IllegalArgumentException("Naam mag niet leeg zijn!");
+	}
+
+	public char getSoortCode() {
+		return soortCode;
+	}
+
+	private void setSoortCode(char soortCode) {
+		if (soortCode != 'A' && soortCode != 'B' && soortCode != 'C')
+			throw new IllegalArgumentException("Soortcode mag enkel A, B of C zijn!");
+		this.soortCode = soortCode;
+	}
+
+	public double getPrijsInEuro() {
+		return prijsInEuro;
+	}
+
+	public void setPrijsInEuro(double prijsInEuro) {
+		this.prijsInEuro = prijsInEuro;
+	}
+
+	public String getNaam() {
+		return naam;
+	}
+
+	public int getHoogteInCm() {
+		return hoogteInCm;
+	}
+
+	private void setHoogteInCm(int hoogteInCm) {
+		if (hoogteInCm <= MIN_HOOGTE || hoogteInCm > MAX_HOOGTE)
+			throw new IllegalArgumentException(
+					String.format("Hoogte moet in interval [%d, %d] liggen!", MIN_HOOGTE, MAX_HOOGTE));
+		this.hoogteInCm = hoogteInCm;
+	}
+
+	public int getAantalInVoorraad() {
+		return aantalInVoorraad;
+	}
+
+	public double berekenVerkoopprijs() {
+		return this.prijsInEuro + prijsInEuro * BTW_PERCENTAGE / 100;
+	}
+
+}
+
+
+//----------------- Tuincentrum-----------------
+package domein;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import persistentie.PlantMapper;
+
+public class Tuincentrum {
+	private List<Plant> planten;
+	private final PlantMapper plantMapper;
+
+	public Tuincentrum() {
+		plantMapper = new PlantMapper();
+		this.planten = plantMapper.geefPlanten();
+	}
+
+	public void voegPlantToe(Plant plant) {
+		boolean bestaalAl = false;
+
+		for (Plant p : planten) {
+			if (p.getNaam().equalsIgnoreCase(plant.getNaam())) {
+				bestaalAl = true;
+				p.setAantalInVoorraad(p.getAantalInVoorraad() + plant.getAantalInVoorraad());
+			}
+		}
+
+		if (!bestaalAl)
+			this.planten.add(plant);
+	}
+
+	public List<Plant> getPlanten() {
+		return planten;
+	}
+
+	// TODO maakOverzichtPlantenPerHoogte
+	public int[] maakOverzichtPlantenPerHoogte() {
+		int[] overzichtPerHoogte = new int[] { 0, 0, 0 };
+
+		for (Plant p : planten) {
+			if (p.getHoogteInCm() < 80)
+				overzichtPerHoogte[0]++;
+			else if (p.getHoogteInCm() >= 80 && p.getHoogteInCm() <= 100)
+				overzichtPerHoogte[1]++;
+			else if (p.getHoogteInCm() > 100)
+				overzichtPerHoogte[2]++;
+		}
+
+		return overzichtPerHoogte;
+	}
+
+	public double bepaalWaardeVerkoop() {
+		double totaal = 0;
+
+		for (Plant plant : planten) {
+			totaal += plant.berekenVerkoopprijs() * plant.getAantalInVoorraad();
+		}
+
+		return totaal;
+	}
+
+	public List<Plant> geefPlanten(boolean inVoorraad) {
+		List<Plant> resultaat = new ArrayList<>();
+
+		if (!inVoorraad)
+			return getPlanten();
+
+		for (Plant plant : planten) {
+			if (plant.getAantalInVoorraad() > 0)
+				resultaat.add(plant);
+		}
+
+		return resultaat;
+	}
+
+}
+
+
+//----------------- DomeinController--------------
+package domein;
+
+import java.util.List;
+
+import dto.PlantDTO;
+
+public class DomeinController {
+	private Tuincentrum tuincentrum;
+
+	public DomeinController() {
+		this.tuincentrum = new Tuincentrum();
+	}
+
+	public void voegPlantToe(String naam, char soortCode, int hoogteInCm, double prijsInEuro, int aantalInVoorraad) {
+		tuincentrum.voegPlantToe(new Plant(naam, soortCode, hoogteInCm, prijsInEuro, aantalInVoorraad));
+
+	}
+
+	public PlantDTO[] geefAllePlanten(boolean inVoorraad) {
+		List<Plant> planten = tuincentrum.geefPlanten(inVoorraad);
+		PlantDTO[] plantenDTO = new PlantDTO[planten.size()];
+
+		for (int i = 0; i < plantenDTO.length; i++) {
+			Plant p = planten.get(i);
+
+			plantenDTO[i] = new PlantDTO(p.getNaam(), p.getSoortCode(), p.getHoogteInCm(), p.getAantalInVoorraad(),
+					p.getPrijsInEuro());
+		}
+
+		return plantenDTO;
+	}
+
+	public double bepaalWaardeVerkoop() {
+		return tuincentrum.bepaalWaardeVerkoop();
+	}
+
+	public int[] maakOverzichtPlantenPerHoogte() {
+		return tuincentrum.maakOverzichtPlantenPerHoogte();
+	}
+
+}
+
+//----------------- TuincentrumApplicatie---------------
+package cui;
+
+import java.util.Scanner;
+
+import domein.DomeinController;
+import dto.PlantDTO;
+
+public class TuincentrumApplicatie {
+	private final DomeinController dc;
+
+	private Scanner input = new Scanner(System.in);
+
+	public TuincentrumApplicatie(DomeinController dc) {
+		this.dc = dc;
+	}
+
+	public void start() {
+		String[] menuKeuzes = { "Toon overzicht alle planten", "Toon overzicht voorradige planten", "Voeg plant toe",
+				"Geef overzicht per hoogte", "Geef verkoopwaarde", "Stoppen" };
+		int keuze = maakMenuKeuze(menuKeuzes, "Wat kies je? ");
+
+		while (keuze != 6) {
+			switch (keuze) {
+			case 1 -> geefPlantenInVoorraad(false);
+			case 2 -> geefPlantenInVoorraad(true);
+			case 3 -> voegPlantToe();
+			case 4 -> maakOverzichtPlantenPerHoogte();
+			case 5 -> {
+				System.out.printf("Verkoopwaarde: %.2f%n", dc.bepaalWaardeVerkoop());
+			}
+			}
+
+			System.out.println();
+			keuze = maakMenuKeuze(menuKeuzes, "Wat kies je? ");
+		}
+
+		System.out.println("Tot de volgende keer!");
+
+	}
+
+	private int maakMenuKeuze(String[] keuzes, String hoofding) {
+		int i = 0;
+		for (; i < keuzes.length; i++) {
+			System.out.printf("%d. %s%n", i + 1, keuzes[i]);
+		}
+
+		System.out.print(hoofding);
+		int keuze = input.nextInt();
+
+		while (keuze < 0 || keuze > i) {
+			System.out.println("Geen geldige keuze");
+
+			System.out.print(hoofding);
+			keuze = input.nextInt();
+		}
+
+		return keuze;
+	}
+
+	private void voegPlantToe() {
+		System.out.print("Wat is de naam van de plant? ");
+		String naam = input.next();
+
+		System.out.print("Wat is de soortcode van de plant (A, B of C)? ");
+		char soortCode = input.next().charAt(0);
+
+		System.out.print("Wat is de hoogte van de plant in cm? ");
+		int hoogteInCm = input.nextInt();
+
+		System.out.print("Wat is de prijs van de plant? €");
+		double prijsInEuro = input.nextDouble();
+
+		System.out.print("Hoeveel zijn er in voorraad? ");
+		int aantalInVoorraad = input.nextInt();
+
+		dc.voegPlantToe(naam, soortCode, hoogteInCm, prijsInEuro, aantalInVoorraad);
+	}
+
+	// Bepaal aantal planten tss 0-80cm, 80cm-1m, groter dan 1 m
+	private void maakOverzichtPlantenPerHoogte() {
+		int[] overzicht = dc.maakOverzichtPlantenPerHoogte();
+
+		System.out.printf("%20s%20s%20s%n", "Kleiner dan 80cm", "80-100cm", "Groter dan 1m");
+		System.out.printf("%20d%20d%20d%n", overzicht[0], overzicht[1], overzicht[2]);
+	}
+
+	private void geefPlantenInVoorraad(boolean inVoorraad) {
+		PlantDTO[] planten = dc.geefAllePlanten(inVoorraad);
+
+		System.out.printf("Overzicht van de planten%s:%n", inVoorraad ? "in voorraad" : "");
+
+		for (PlantDTO p : planten) {
+			System.out.printf("%S met code %s, %dcm hoog, kost: EUR %.2f: %d in voorraad%n", p.naam(), p.soortCode(),
+					p.hoogteInCm(), p.prijsInEuro(), p.aantalInVoorraad());
+		}
+
+	}
+}
+
+//----------------- PlantDTO--------
+package dto;
+
+public record PlantDTO(String naam, char soortCode, int hoogteInCm, int aantalInVoorraad, double prijsInEuro) {
+
+}
+
+//----------------- StartUp---------
+package main;
+
+import cui.TuincentrumApplicatie;
+import domein.DomeinController;
+
+public class StartUp {
+
+	public static void main(String[] args) {
+		new TuincentrumApplicatie(new DomeinController()).start();
+	}
+
+}
+
+

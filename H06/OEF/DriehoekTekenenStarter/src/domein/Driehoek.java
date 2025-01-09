@@ -18,9 +18,12 @@ public class Driehoek {
 	}
 
 	public String geefAlsTekening() {
-		// TODO
-		// maak gebruik van een switch om de juiste methode aan te roepen (volgens de
-		// orientatie)
+		return switch (orientatie) {
+		case Orientatie.LINKS_BOVEN -> geefDriehoekLinksBoven();
+		case Orientatie.RECHTS_BOVEN -> geefDriehoekRechtsBoven();
+		case Orientatie.LINKS_ONDER -> geefDriehoekLinksOnder();
+		case Orientatie.RECHTS_ONDER -> geefDriehoekRechtsOnder();
+		};
 	}
 
 	private String geefDriehoekRechtsBoven() {
@@ -68,17 +71,20 @@ public class Driehoek {
 
 	}
 
-	private String geefDriehoekLinksOnderRecursief(int grootte) {
-		// TODO: implementeer
-	}
+//	private String geefDriehoekLinksOnderRecursief(int grootte) {
+//		// TODO: implementeer
+//	}
 
 	public void setGrootte(int grootte) {
-		// TODO - controleer domeinregel
+		if (grootte < MIN_GROOTTE || grootte > MAX_GROOTTE)
+			throw new IllegalArgumentException(
+					String.format("Grootte moet in interval [%d, %d] liggen!", MIN_GROOTTE, MAX_GROOTTE));
 		this.grootte = grootte;
 	}
 
 	public void setTeken(char teken) {
-		// TODO - controleer domeinregel
+		if (TOEGESTANE_TEKENS.indexOf(teken) == -1)
+			throw new IllegalArgumentException(String.format("Teken moet een van deze zijn: %s", TOEGESTANE_TEKENS));
 		this.teken = teken;
 	}
 
